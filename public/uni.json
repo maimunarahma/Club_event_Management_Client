@@ -1,0 +1,212 @@
+[
+    {
+      "id": 1,
+      "name": "University of Dhaka",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/9/9f/University_of_Dhaka_logo.svg",
+      "website": "http://www.du.ac.bd",
+      "ranking": {
+        "country_rank": 1,
+        "asia_rank": 216,
+        "world_rank": 962
+      },
+      "location": "Dhaka, Bangladesh"
+    },
+    {
+      "id": 2,
+      "name": "Bangladesh University of Engineering and Technology (BUET)",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/0/0d/Buet_logo.svg",
+      "website": "https://www.buet.ac.bd",
+      "ranking": {
+        "country_rank": 2,
+        "asia_rank": 380,
+        "world_rank": 1379
+      },
+      "location": "Dhaka, Bangladesh"
+    },
+    {
+      "id": 3,
+      "name": "University of Rajshahi",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/3/3e/University_of_Rajshahi_logo.svg",
+      "website": "http://www.ru.ac.bd",
+      "ranking": {
+        "country_rank": 3,
+        "asia_rank": 500,
+        "world_rank": 1500
+      },
+      "location": "Rajshahi, Bangladesh"
+    },
+    {
+      "id": 4,
+      "name": "University of Chittagong",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/7/7e/University_of_Chittagong_logo.svg",
+      "website": "http://www.cu.ac.bd",
+      "ranking": {
+        "country_rank": 4,
+        "asia_rank": 600,
+        "world_rank": 1600
+      },
+      "location": "Chittagong, Bangladesh"
+    },
+    {
+      "id": 5,
+      "name": "Jahangirnagar University",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/1/1e/Jahangirnagar_University_logo.svg",
+      "website": "http://www.juniv.edu",
+      "ranking": {
+        "country_rank": 5,
+        "asia_rank": 700,
+        "world_rank": 1700
+      },
+      "location": "Savar, Dhaka, Bangladesh"
+    },
+    {
+      "id": 6,
+      "name": "North South University (NSU)",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/3/3e/North_South_University_logo.svg",
+      "website": "https://www.northsouth.edu",
+      "ranking": {
+        "country_rank": 1,
+        "asia_rank": 800,
+        "world_rank": 1800
+      },
+      "location": "Dhaka, Bangladesh"
+    },
+    {
+      "id": 7,
+      "name": "BRAC University",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/9/9b/BRAC_University_logo.svg",
+      "website": "https://www.bracu.ac.bd",
+      "ranking": {
+        "country_rank": 2,
+        "asia_rank": 850,
+        "world_rank": 1850
+      },
+      "location": "Dhaka, Bangladesh"
+    },
+    {
+      "id": 8,
+      "name": "Independent University, Bangladesh (IUB)",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/2/2d/Independent_University%2C_Bangladesh_logo.svg",
+      "website": "http://www.iub.edu.bd",
+      "ranking": {
+        "country_rank": 3,
+        "asia_rank": 900,
+        "world_rank": 1900
+      },
+      "location": "Dhaka, Bangladesh"
+    },
+    {
+      "id": 9,
+      "name": "East West University (EWU)",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/1/1e/East_West_University_logo.svg",
+      "website": "http://www.ewubd.edu",
+      "ranking": {
+        "country_rank": 4,
+        "asia_rank": 950,
+        "world_rank": 1950
+      },
+      "location": "Dhaka, Bangladesh"
+    },
+    {
+      "id": 10,
+      "name": "Ahsanullah University of Science and Technology (AUST)",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/5/5f/Ahsanullah_University_of_Science_and_Technology_logo.svg",
+      "website": "http://www.aust.edu",
+      "ranking": {
+        "country_rank": 5,
+        "asia_rank": 1000,
+        "world_rank": 2000
+      },
+      "location": "Dhaka, Bangladesh"
+    },
+    {
+      "id": 11,
+      "name": "American International University-Bangladesh (AIUB)",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/0/0e/American_International_University-Bangladesh_logo.svg",
+      "website": "http://www.aiub.edu",
+      "ranking": {
+        "country_rank": 6,
+        "asia_rank": 1050,
+        "world_rank": 2050
+      },
+      "location": "Dhaka, Bangladesh"
+    },
+    {
+      "id": 12,
+      "name": "Daffodil International University (DIU)",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/9/9b/Daffodil_International_University_logo.svg",
+      "website": "http://www.daffodilvarsity.edu.bd",
+      "ranking": {
+        "country_rank": 7,
+        "asia_rank": 1100,
+        "world_rank": 2100
+      },
+      "location": "Dhaka, Bangladesh"
+    },
+    {
+      "id": 13,
+      "name": "United International University (UIU)",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/4/4f/United_International_University_logo.svg",
+      "website": "http://www.uiu.ac.bd",
+      "ranking": {
+        "country_rank": 8,
+        "asia_rank": 1150,
+        "world_rank": 2150
+      },
+      "location": "Dhaka, Bangladesh"
+    },
+    {
+      "id": 14,
+      "name": "University of Asia Pacific (UAP)",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/3/3d/University_of_Asia_Pacific_logo.svg",
+      "website": "http://www.uap-bd.edu",
+      "ranking": {
+        "country_rank": 9,
+        "asia_rank": 1200,
+        "world_rank": 2200
+      },
+      "location": "Dhaka, Bangladesh"
+    },
+    {
+      "id": 15,
+      "name": "University of Liberal Arts Bangladesh (ULAB)",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/8/8f/University_of_Liberal_Arts_Bangladesh_logo.svg",
+      "website": "http://www.ulab.edu.bd",
+      "ranking": {
+        "country_rank": 10,
+        "asia_rank": 1250,
+        "world_rank": 2250
+      },
+      "location": "Dhaka, Bangladesh"
+    },
+    {
+        "id": 16,
+        "name": "Shahjalal University of Science and Technology (SUST)",
+        "logo": "https://seeklogo.com/images/S/shahjalal-university-of-science-and-technology-logo-344200E0A7-seeklogo.com.png",
+        "website": "https://www.sust.edu",
+        "ranking": {
+          "qs_world": "1201-1400",
+          "qs_asia": 342,
+          "country_rank": 11,
+          "world_rank": 3448
+        },
+        "location": "Sylhet, Bangladesh"
+      },
+      {
+        "id": 17,
+        "name": "Jashore University of Science and Technology (JUST)",
+        "logo": "https://seeklogo.com/images/J/jashore-university-of-science-and-technology-just-logo-484433F6B3-seeklogo.com.png",
+        "website": "https://just.edu.bd",
+        "ranking": {
+          "qs_asia_southern": 179,
+          "qs_asia": "601-620",
+          "the_asia": "401-500",
+          "the_world": "801-1000",
+          "scimago_engineering": 27
+        },
+        "location": "Jashore, Bangladesh"
+      }
+      
+      
+  ]
+  
