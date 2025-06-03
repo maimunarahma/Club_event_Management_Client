@@ -8,11 +8,14 @@ import {
   RouterProvider,
 } from "react-router";
 import Banner from './Layout/Home/Banner.jsx';
-import UniversityGridPage from './Routes/Univarsity.jsx';
+import University from './Routes/Univarsity.jsx';
 import Authentication from './providers/Authentication.jsx';
 import Dashboard from './Routes/Dashboard.jsx';
 import Private from './Routes/Private.jsx';
 import Event from './Routes/Event.jsx';
+import Participantion from './Routes/Participantion.jsx';
+import UniversityGridPage from './Routes/Univarsity.jsx';
+import News from './Routes/News.jsx';
 
 let router = createBrowserRouter([
   {
@@ -33,6 +36,12 @@ let router = createBrowserRouter([
       },{
         path:'/event',
         element:<Event/>
+      },{
+        path:'/event/:id',
+        element:<Private><Participantion/></Private>
+      },{
+        path:'/news',
+        element:<News/>
       }
     ]
   },

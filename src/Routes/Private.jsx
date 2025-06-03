@@ -3,8 +3,8 @@ import { AuthContext } from '../providers/Authentication';
 
 const Private = ({children}) => {
     const {user}=useContext(AuthContext)
-    console.log(user.email)
-    if(user && user.email){
+    console.log(user?.email)
+    if(user && user?.email){
         return children;
     }
     return (

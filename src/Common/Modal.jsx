@@ -5,11 +5,11 @@ import axios from 'axios';
 
 const Modal = ({ open, onclose }) => {
     const { user, SignUp, setUser, login } = useContext(AuthContext);
-    console.log(user, SignUp,)
+    // console.log(user, SignUp,)
     const [activeTab, setActiveTab] = useState('login');
     const [uniError, setUniError] = useState('');
 
-    console.log(open, onclose)
+    // console.log(open, onclose)
 
 
     const [formData, setFormData] = useState({

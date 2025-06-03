@@ -2,12 +2,12 @@ import React from "react";
 import "./Banner.css";
 const Banner = () => {
   return (
-    <section className="bg-gradient-to-r from-blue-900 via-green-700 to-yellow-500 text-white py-20 px-4 text-center md:text-left">
+    <section className=" text-purple-600 py-20 px-4 text-center md:text-left">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8">
         {/* Text Area */}
         <div className="flex-1 space-y-6">
           <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-            🎓 CampusBeat
+          CampusBeat
           </h1>
           <p className="text-xl font-medium">
             Connecting All University Events Across Bangladesh
