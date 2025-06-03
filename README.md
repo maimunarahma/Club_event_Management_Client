@@ -1,12 +1,53 @@
-# React + Vite
+# 🎉 Event Management Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the **frontend (client-side)** of the Event Management Web Application. It enables users from different universities and clubs to **view, manage, and register** for various events. Built using **React.js**, it includes role-based views for **students**, **club admins**, and **event managers**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🔗 Live Website
 
-## Expanding the ESLint configuration
+👉 [Visit the Event Portal](https://your-client-url.vercel.app)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🚀 Features
+
+- 🔍 Browse upcoming events with details (type, location, date, prize, etc.)
+- 🔐 Role-based dashboard: Student | Club Admin | Event Manager
+- 📅 Club Admin can update event status (Pending/Accepted)
+- 🏫 View club and university information related to each event
+- 🔗 External registration links
+- ✨ Clean, responsive design with Tailwind CSS
+- 🛡️ Authentication via Firebase
+
+---
+
+## 🧰 Tech Stack
+
+| Frontend | Description          |
+|----------|----------------------|
+| React.js | Frontend framework   |
+| Axios    | API data fetching    |
+| Tailwind | CSS utility framework|
+| SweetAlert2 | Confirmation Modals |
+| React Router | Routing and navigation |
+
+---
+
+## 📁 Folder Structure
+
+```bash
+event-client/
+│
+├── public/
+│
+├── src/
+│   ├── components/        # Reusable UI components
+│   ├── pages/             # Main views (e.g., Event.js)
+│   ├── providers/         # Contexts like Authentication
+│   ├── App.jsx            # Main App
+│   └── main.jsx           # Entry Point
+│
+├── .env                   # Environment variables
+├── package.json
+└── README.md
