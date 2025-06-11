@@ -12,7 +12,7 @@ const Event = () => {
     const [dateRange, setDateRange] = useState(false);
     const [query, setQuery] = useState("");
     const { user } = useContext(AuthContext);
-
+    const [type, setType]=useState(false)
     useEffect(() => {
         console.log(query)
         if (query) {
@@ -32,8 +32,8 @@ const Event = () => {
 
     const currentUserProfile = getProfile(user?.email);
     const isClubAdmin = currentUserProfile.role === 'club_admin';
+    let filteredEvents = [];
 
-    let filteredEvents = []
     if (isClubAdmin) {
         filteredEvents = events.filter(ev => {
             const club = getClub(ev.clubId);
@@ -47,16 +47,17 @@ const Event = () => {
         filteredEvents = events;
     }
 
-
+   const handleType=()=>{
+    setType(!type)
+    setDateRange('')
+   }
 
     const handleDateRangeChange = () => {
         setDateRange(!dateRange);
-
+        setType('')
     }
     const handleStatusChange = (eventId, newStatus, currentStatus) => {
-        console.log(eventId)
-        console.log(getProfile("nsu@admin.com").role)
-
+       
         Swal.fire({
             title: "Are you sure?",
             text: "Do you want to accept this event?",
@@ -88,41 +89,63 @@ const Event = () => {
 
 
     return (
-        <div className="flex flex-col items-center justify-center  bg-gray-100">
-            <div className=''>
-                <div className='mt-5 flex justify-start items-center gap-4'>
-                    <button className="flex items-center gap-2 px-4 py-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium shadow-md transition">
+        <div className="flex flex-col items-center justify-center  bg-purple-200">
+            <div className='w-full'>
+                <div className='mt-5  grid md:grid-cols-5 grid-cols-2  gap-4 w-[70%] mx-auto'>
+                    <button className=" flex items-center gap-2 px-2 py-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium shadow-md transition">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 13.414V19a1 1 0 01-1.447.894l-4-2A1 1 0 019 17v-3.586L3.293 6.707A1 1 0 013 6V4z" />
                         </svg>
                         Filter Events <ArrowDropDownCircleIcon />
                     </button>
-                    <button className="flex items-center gap-2 px-4 py-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium shadow-md transition">
+                    <button onClick={handleType} className="flex items-center gap-2 px-4 py-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium shadow-md transition">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 13.414V19a1 1 0 01-1.447.894l-4-2A1 1 0 019 17v-3.586L3.293 6.707A1 1 0 013 6V4z" />
                         </svg>
                         Event Type<ArrowDropDownCircleIcon />
                     </button>
-                    <div className="relative inline-block text-left">
-                        {/* Filter Button */}
+                    <div className="z-30 relative inline-block text-left">
+
                         <button onClick={handleDateRangeChange} className="flex items-center gap-2 px-4 py-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium shadow-md transition">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 13.414V19a1 1 0 01-1.447.894l-4-2A1 1 0 019 17v-3.586L3.293 6.707A1 1 0 013 6V4z" />
                             </svg>
                             Date Range
-                            <span className="ml-1">&#9662;</span> {/* Down arrow */}
+                            <span className="ml-1">&#9662;</span>
                         </button>
 
-                        {/* Dropdown Menu */}
-                        {dateRange &&
-                            <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
-                                <div className="py-1 text-gray-700">
-                                    <button className="block w-full px-4 py-2 text-left hover:bg-purple-100" onClick={() => setQuery('all')}>All</button>
+                      {
+                        type && 
+                          <div className="absolute right-40 mt-2 w-56 rounded-md  bg-white ring-1 ring-black ring-opacity-5 z-50">
+                                <div className="py-1 font-semibold  bg-purple-600 text-white  ">
 
-                                    <button className="block w-full px-4 py-2 text-left hover:bg-purple-100" onClick={() => setQuery('today')}>Today</button>
-                                    <button className="block w-full px-4 py-2 text-left hover:bg-purple-100" onClick={() => setQuery('week')}>This Week</button>
-                                    <button className="block w-full px-4 py-2 text-left hover:bg-purple-100" onClick={() => setQuery('month')}>This Month</button>
-                                    <button className="block w-full px-4 py-2 text-left hover:bg-purple-100">Custom Range</button>
+                                
+                                    <button className="block w-full px-4 py-2 text-left bg-purple-600 text-white hover:bg-accent hover:text-grey-500" onClick={() => setQuery('all')}>All</button>
+
+                                    <button className="block w-full px-4 py-2 text-left bg-purple-600 text-white hover:bg-accent" onClick={() => setQuery('seminar')}>Seminar</button>
+
+                                    <button className="block w-full px-4 py-2 text-left hover:bg-accent" onClick={() => setQuery('workshop')}>Workshop</button>
+                                    <button className="block w-full px-4 py-2 text-left hover:bg-accent" onClick={() => setQuery('competition')}>Competition</button>
+                                    <button className="block w-full px-4 py-2 text-left  hover:bg-accent" onClick={() => setQuery('webinar')}>Webinar</button>
+                                     <button className="block w-full px-4 py-2 text-left  hover:bg-accent" onClick={() => setQuery('hackathon')}>Hackathon</button>
+                                      <button className="block w-full px-4 py-2 text-left  hover:bg-accent">Cultural Program</button>
+                                       <button className="block w-full px-4 py-2 text-left  hover:bg-accent" onClick={() => setQuery('sports')}>Sports</button>
+                                        <button className="block w-full px-4 py-2 text-left  hover:bg-accent">Social Awareness</button>
+                                         <button className="block w-full px-4 py-2 text-left  hover:bg-accent">Tech Talk</button>
+                                </div>
+                            </div>
+                      }
+
+                        {dateRange &&
+                            <div className="absolute -right-10 mt-2 w-56 rounded-md  bg-white ring-1 ring-black ring-opacity-5 z-50">
+                                <div className="py-1 font-semibold  bg-purple-600 text-white  ">
+                                    <button className="block w-full px-4 py-2 text-left bg-purple-600 text-white hover:bg-accent hover:text-grey-500" onClick={() => setQuery('all')}>All</button>
+
+                                    <button className="block w-full px-4 py-2 text-left bg-purple-600 text-white hover:bg-accent" onClick={() => setQuery('today')}>Today</button>
+
+                                    <button className="block w-full px-4 py-2 text-left hover:bg-accent" onClick={() => setQuery('week')}>This Week</button>
+                                    <button className="block w-full px-4 py-2 text-left hover:bg-accent" onClick={() => setQuery('month')}>This Month</button>
+                                    <button className="block w-full px-4 py-2 text-left  hover:bg-accent">Custom Range</button>
                                 </div>
                             </div>}
 
@@ -136,19 +159,19 @@ const Event = () => {
                     </button>
 
                 </div>
-                <div className='grid grid-cols-3 mx-auto mt-10 p-6 gap-6'>
+                <div className='grid md:grid-cols-3 grid-cols-1 mx-auto mt-10 p-8 gap-6'>
                     {filteredEvents.length > 0 ? (
                         filteredEvents.map((ev, index) => {
                             const club = getClub(ev.clubId);
                             const uni = getUni(club.universityId);
 
                             return (
-                                <div key={ev._id || index} className="col-span-1 p-6 shadow-lg rounded-xl bg-white">
+                                <div key={ev._id || index} className="col-span-1 space-y-4 p-6 shadow-lg rounded-xl bg-white">
                                     <h1 className="text-2xl font-bold mb-4">{ev.name}</h1>
-                                    <p><strong>Type:</strong> {ev.eventType}</p>
-                                    <p><strong>Location:</strong> {ev.location}</p>
-                                    <p><strong>Date:</strong> {new Date(ev.eventDate).toLocaleString()}</p>
-                                    <p><strong>Deadline:</strong> {ev.deadline}</p>
+                                    <p className='flex justify-start items-center gap-4'><img src="/genres.png" alt="" className='w-15 h-10' title="Event Type" /> <strong>{ev.eventType}</strong></p>
+                                    <p className='flex justify-start items-center gap-4'><img src="/map.png" alt="" className='w-15 h-10' title='location' /><strong> {ev.location}</strong></p>
+                                    <p className='flex justify-start items-center gap-4'><img src="/calendar.png" alt="" className='w-15 h-10' title='event date' /><strong> {new Date(ev.eventDate).toLocaleString()}</strong></p>
+                                    <p className='flex justify-start items-center gap-4'><img src="deadline.png" alt="" className='w-15 h-10' title='registration deadline' /><strong>{ev.deadline}</strong> </p>
                                     <p><strong>Managed by:</strong> {ev.eventManageEmail}</p>
                                     <p><strong>Prize:</strong> ${ev.prizeMoney}k</p>
                                     <p><strong>Fee:</strong> ${ev.registrationFee}</p>

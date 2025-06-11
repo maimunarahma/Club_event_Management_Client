@@ -36,16 +36,20 @@ const Modal = ({ open, onclose }) => {
 
         try {
             if (activeTab === 'login') {
-                console.log("Active tab is login");
-
-                const res = await login(email, pass); // ✅ FIXED
-                setUser(res.user); // ✅ Works now
+                const res = await login(email, pass);
+                setUser(res.user);
                 toast.success("Login successful! 🎉");
+
+                setTimeout(() => {
+                    onclose();
+                }, 2000);
+            // form.reset();
             }
         } catch (error) {
-            console.error("Login error:", error.code, error.message);
+
             toast.error("Login failed: " + error.message);
         }
+
     };
 
     const handleSubmit = async (e) => {
@@ -95,6 +99,7 @@ const Modal = ({ open, onclose }) => {
                         setUniError("");
                         //   await updateProfileUser({ displayName: name, photoURL: picUrl });
                         toast.success("Registration successful! 🎉", { position: "top-center" });
+                        onclose();
                     }
                 }
                 // if(formData.role === 'general_user'){
@@ -131,6 +136,7 @@ const Modal = ({ open, onclose }) => {
                     })
                     const data5 = await response5.json();
                     console.log(data5)
+                    onclose()
                 }
 
 
@@ -187,21 +193,25 @@ const Modal = ({ open, onclose }) => {
                         console.log("User registered successfully:", res.data);
 
                     }
+
                     )
                 toast.success("Event Manager registration successful! 🎉")
-            } else if (formData.role === 'event_manager' && isExist == true && isExist2 == false) {
+                onclose();
+            } else if (formData.role === 'event_manager' && isExist == true && isExist2 == false && activeTab === 'register') {
                 console.log(`This ${formData.clubName} is not registered. Please register first.`)
                 setUniError(`This ${formData.clubName} is not registered. Please register first.`);
 
+
             }
 
-            if ((formData.role === 'general_user' && isExist == true) || (isExist == true && formData.role === 'super_admin')) {
+            if ((formData.role === 'general_user' && isExist == true && activeTab === 'register') || (isExist == true && formData.role === 'super_admin' && activeTab === 'register')) {
                 const res = await SignUp(email, pass);
                 if (res?.user) {
                     setUser(res.user);
                     //   await updateProfileUser({ displayName: name, photoURL: picUrl });
                     toast.success("Registration successful! 🎉");
                     setUniError("");
+                    onclose()
                 }
                 const user = {
                     name: formData.name,
@@ -238,17 +248,18 @@ const Modal = ({ open, onclose }) => {
         } catch (error) {
             console.error("Error fetching university data:", error);
         }
+        // setFromData()
     };
 
     if (!open) return null;
 
     return (
-        <div className="fixed  inset-0 flex items-center justify-center z-50">
-            <div className=" max-h-[90vh] bg-black text-white overflow-y-auto  max-w-md p-6 rounded-lg shadow-xl relative ">
+        <div className={`${activeTab==='login'? 'absolute bottom-60 right-80  left-60 flex items-center justify-center bg-black' : 'absolute bottom-20 right-80  left-60 flex items-center justify-center bg-black'}`}>
+            <div className="  bg-purple-500  text-black overflow-y-auto  max-w-md p-6 rounded-lg shadow-xl ">
                 <ToastContainer />
                 <button
                     onClick={onclose}
-                    className="absolute top-2 right-2 text-gray-500 hover:text-red-500"
+                    className="absolute top-5 right-80 text-gray-500 hover:text-red-500"
                 >
                     ✖
                 </button>
@@ -266,7 +277,7 @@ const Modal = ({ open, onclose }) => {
                     <button
                         className={`px-4 py-2 font-semibold ${activeTab === "register"
                             ? "text-white bg-blue-600"
-                            : "text-blue-600"
+                            : "text-blue-600 bg-white"
                             } rounded-r-lg border border-blue-600`}
                         onClick={() => setActiveTab("register")}
                     >
@@ -276,7 +287,7 @@ const Modal = ({ open, onclose }) => {
 
                 {/* Forms */}
                 {activeTab === "login" ? (
-                    <form className="space-y-2" onSubmit={handleSubmitLogin}>
+                    <form className="space-y-2" onSubmit={handleSubmitLogin} autoComplete="off">
                         <input
                             type="email"
                             name='email'
@@ -300,7 +311,7 @@ const Modal = ({ open, onclose }) => {
                         </button>
                     </form>
                 ) : (
-                    <form className="space-y-2" onSubmit={handleSubmit}>
+                    <form className="space-y-1" onSubmit={handleSubmit}>
                         <input
                             name='name'
                             type='text'
@@ -345,7 +356,7 @@ const Modal = ({ open, onclose }) => {
                             name="role"
                             value={formData.role}
                             onChange={handleChange}
-                            className="w-full px-4 py-2 rounded border bg-black text-white"
+                            className="w-full px-4 py-2 rounded border bg-white text-grey"
                             required>
                             <option value="">Select Role</option>
                             <option value="super_admin">Super Admin</option>

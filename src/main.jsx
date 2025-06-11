@@ -16,41 +16,73 @@ import Event from './Routes/Event.jsx';
 import Participantion from './Routes/Participantion.jsx';
 import UniversityGridPage from './Routes/Univarsity.jsx';
 import News from './Routes/News.jsx';
-
+import Participant from './ClubAdmin/Participant.jsx';
+import DashHome from './Dashboard/DashHome.jsx';
+import ManageEvents from './Dashboard/ManageEvents.jsx';
+import Settings from './Dashboard/Settings.jsx';
+import Notifications from './Dashboard/Notifications.jsx';
+import ChatBot from './Routes/ChatBot.jsx';
 let router = createBrowserRouter([
   {
     path: "/",
-    element:<App/>,
-    children:[
+    element: <App />,
+    children: [
       {
-        path:'/',
-        element:<Banner/>
+        path: '',         // equivalent to '/' at this level
+        element: <Banner />
       },
       {
-        path:'/uni',
-        element:<UniversityGridPage/>
+        path: 'uni',
+        element: <UniversityGridPage />
       },
       {
-        path:'/dashboard',
-        element:<Private><Dashboard/></Private>
-      },{
-        path:'/event',
-        element:<Event/>
-      },{
-        path:'/event/:id',
-        element:<Private><Participantion/></Private>
-      },{
-        path:'/news',
-        element:<News/>
-      }
+        path: 'event',
+        element: <Event />
+      },
+      {
+        path: 'event/:id',
+        element: <Private><Participantion /></Private>
+      },
+      {
+        path: 'news',
+        element: <News />
+      },
+      {
+        path: 'dashboard',
+        element: <Private><Dashboard /></Private>,
+        children: [
+          {
+            path: '',
+            element: <Private><DashHome/></Private>
+          },
+
+          {
+            path: 'participants',
+            element: <Private><Participant /></Private>
+          },
+          {
+            path: 'manage-events',
+            element: <Private><ManageEvents/></Private>
+          },
+          {
+            path:'settings',
+            element:<Settings/>
+          },
+          {
+            path:'notifications',
+            element:<Notifications/>
+          },
+        ]
+      },
     ]
   },
 ]);
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Authentication>
- <RouterProvider router={router} />
+      <RouterProvider router={router} />
     </Authentication>
-   
+
   </StrictMode>,
 )

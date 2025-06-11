@@ -1,6 +1,4 @@
-@plugin "daisyui";
-@import "tailwindcss";
-/* *{
-    background-color: black;
-    color: whitesmoke;
-} */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind plugin "daisyui";
