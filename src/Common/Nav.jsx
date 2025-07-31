@@ -9,7 +9,7 @@ const Nav = () => {
     const { user, signOutUser } = useContext(AuthContext)
     const [allProfile, setAllProfile] = useState([])
     useEffect(() => {
-        axios.get('http://localhost:5000/users')
+        axios.get('https://club-event-management-server.vercel.app/users')
             .then(res => {
                 setAllProfile(res.data)
 

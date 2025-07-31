@@ -9,7 +9,7 @@ const Settings = () => {
       const {user}=useContext(AuthContext)
     //   console.log(user);
   useEffect(()=>{
-    axios.get('http://localhost:5000/club')
+    axios.get('https://club-event-management-server.vercel.app/club')
     .then(res=>{
         setAllClub(res.data)
     })

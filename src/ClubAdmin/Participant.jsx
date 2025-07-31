@@ -15,12 +15,12 @@ const Participant = () => {
 
     useEffect(() => {
 
-        axios.get('http://localhost:5000/event').then(res => setEvents(res.data));
+        axios.get('https://club-event-management-server.vercel.app/event').then(res => setEvents(res.data));
 
-        axios.get('http://localhost:5000/club').then(res => setClubs(res.data));
-        axios.get('http://localhost:5000/uni').then(res => setUnis(res.data));
-        axios.get('http://localhost:5000/users').then(res => setAllProfiles(res.data));
-         axios.get('http://localhost:5000/participants')
+        axios.get('https://club-event-management-server.vercel.app/club').then(res => setClubs(res.data));
+        axios.get('https://club-event-management-server.vercel.app/uni').then(res => setUnis(res.data));
+        axios.get('https://club-event-management-server.vercel.app/users').then(res => setAllProfiles(res.data));
+         axios.get('https://club-event-management-server.vercel.app/participants')
             .then(res => {
                 if (res.data) {
                     setParticipants(res.data);

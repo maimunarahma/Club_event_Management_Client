@@ -2,3 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @tailwind plugin "daisyui";
+
+
+@import "tailwindcss";
+@plugin "daisyui";

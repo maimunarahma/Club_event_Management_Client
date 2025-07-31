@@ -43,7 +43,7 @@ const Modal = ({ open, onclose }) => {
                 setTimeout(() => {
                     onclose();
                 }, 2000);
-            // form.reset();
+                // form.reset();
             }
         } catch (error) {
 
@@ -53,104 +53,94 @@ const Modal = ({ open, onclose }) => {
     };
 
     const handleSubmit = async (e) => {
-
         e.preventDefault();
-        console.log(formData);
         const pass = formData.password;
         const email = formData.email;
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{4,}$/;
 
+        if (!passwordRegex.test(pass)) {
+            toast.error(
+                "Password must contain at least 6 characters with uppercase and lowercase letters.",
+                { position: "top-center" }
+            );
+            return;
+        }
 
         try {
+            const [uniRes, clubRes] = await Promise.all([
+                fetch('https://club-event-management-server.vercel.app/uni'),
+                fetch('https://club-event-management-server.vercel.app/club')
+            ]);
 
-            if (!passwordRegex.test(pass)) {
-                toast.error(
-                    "Password must contain at least 6 characters with uppercase and lowercase letters.",
-                    { position: "top-center" }
-                );
-                return;
-            }
+            const unis = await uniRes.json();
+            const clubs = await clubRes.json();
 
+            const university = unis.find(item => item.name === formData.universityName);
+            const club = clubs.find(item => item?.name === formData.clubName);
 
-            const response = await fetch('http://localhost:5000/uni');
-            const data = await response.json();
+            const isExist = Boolean(university);
+            const isExist2 = Boolean(club);
 
-            const isExist = data.some((item) =>
-                item.name.includes(formData.universityName)
-            );
-            console.log(isExist)
-            const response2 = await fetch('http://localhost:5000/club');
-            const data2 = await response2.json();
-            const isExist2 = data2.some((item) => item?.name?.includes(formData.clubName))
-            console.log(isExist2)
             const user = {
                 name: formData.name,
                 email: formData.email,
                 password: formData.password,
                 role: formData.role,
                 universityName: formData.universityName,
-            }
-            if (activeTab === 'register' && isExist == true && isExist2 == false) {
-                console.log('hellllllllo')
-                if (formData.role !== 'event_manager') {
-                    const res = await SignUp(email, pass);
-                    if (res?.user) {
-                        setUser(res.user);
-                        setUniError("");
-                        //   await updateProfileUser({ displayName: name, photoURL: picUrl });
-                        toast.success("Registration successful! 🎉", { position: "top-center" });
-                        onclose();
-                    }
-                }
-                // if(formData.role === 'general_user'){
+            };
 
-                if (formData.role === 'club_admin') {
-                    setUniError("");
-
-                    const response3 = await fetch('http://localhost:5000/users', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/json'
-                        },
-                        body: JSON.stringify(user),
-                    })
-                    const data3 = await response3.json();
-                    console.log(data3)
-                    console.log(data)
-                    const uni = data.find(item => item.name === formData.universityName);
-                    console.log(uni)
-                    const club = {
-                        name: formData.clubName,
-                        type: formData.Type,
-                        universityId: uni._id,
-                        clubAdminEmail: formData.email,
-
-                    }
-                    console.log(club)
-                    const response5 = await fetch('http://localhost:5000/club', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/json'
-                        },
-                        body: JSON.stringify(club),
-                    })
-                    const data5 = await response5.json();
-                    console.log(data5)
-                    onclose()
+            // 🔹 Club Admin registration
+            if (formData.role === 'club_admin' && activeTab === 'register') {
+                if (!isExist) {
+                    setUniError(`University '${formData.universityName}' does not exist.`);
+                    return;
                 }
 
+                if (isExist2) {
+                    setUniError(`This club '${club.name}' already exists. Contact admin or use a new name.`);
+                    return;
+                }
 
+                await fetch('https://club-event-management-server.vercel.app/users', {
+                    method: 'POST',
+                    headers: { 'Content-type': 'application/json' },
+                    body: JSON.stringify(user),
+                });
 
+                const newClub = {
+                    name: formData.clubName,
+                    type: formData.Type,
+                    universityId: university._id,
+                    clubAdminEmail: formData.email,
+                };
+
+                await fetch('https://club-event-management-server.vercel.app/club', {
+                    method: 'POST',
+                    headers: { 'Content-type': 'application/json' },
+                    body: JSON.stringify(newClub),
+                });
+
+                toast.success("Club Admin registered successfully! 🎉", { position: "top-center" });
+                onclose();
             }
-            if (formData.role === 'event_manager' && isExist == true && isExist2 == true && activeTab === 'register') {
 
-                const uni = data.find(item => item.name === formData.universityName);
-                const isClub = data2.find(item => item.name === formData.clubName)
+            // 🔹 Event Manager registration
+            else if (formData.role === 'event_manager' && activeTab === 'register') {
+                if (!isExist) {
+                    setUniError(`University '${formData.universityName}' does not exist.`);
+                    return;
+                }
+
+                if (!isExist2) {
+                    setUniError(`This club '${formData.clubName}' is not registered. Please register first.`);
+                    return;
+                }
+
                 const event = {
                     name: formData.eventName,
                     eventManageEmail: formData.email,
-                    universityId: uni._id,
-                    clubId: isClub._id,
+                    universityId: university._id,
+                    clubId: club._id,
                     eventType: formData.eventType,
                     location: formData.location,
                     registrationLink: formData.registrationLink,
@@ -160,101 +150,71 @@ const Modal = ({ open, onclose }) => {
                     registrationFee: formData.registrationFee,
                     registrationProcess: formData.registrationProcess,
                     status: 'pending'
+                };
 
-                }
-                console.log(event)
-                const responEvent = await fetch('http://localhost:5000/event', {
-                    method: 'POST',
-                    headers: {
-                        'Content-type': 'application/json'
-                    },
-                    body: JSON.stringify(event),
-                })
-                const dataEvent = await responEvent.json();
-                console.log(dataEvent)
-                const user = {
-                    name: formData.name,
-                    email: formData.email,
-                    password: formData.password,
-                    role: formData.role,
-                    universityName: formData.universityName,
-                }
                 const res = await SignUp(email, pass);
                 if (res?.user) {
                     setUser(res.user);
-                    setUniError("");
-                    //   await updateProfileUser({ displayName: name, photoURL: picUrl });
-                    toast.success("Registration successful! 🎉");
-                    setUniError("");
+                    await fetch('https://club-event-management-server.vercel.app/event', {
+                        method: 'POST',
+                        headers: { 'Content-type': 'application/json' },
+                        body: JSON.stringify(event),
+                    });
+                    await axios.post('https://club-event-management-server.vercel.app/users', user);
+                    toast.success("Event Manager registration successful! 🎉", { position: "top-center" });
+                    onclose();
                 }
-
-                axios.post('http://localhost:5000/users', user)
-                    .then(res => {
-                        console.log("User registered successfully:", res.data);
-
-                    }
-
-                    )
-                toast.success("Event Manager registration successful! 🎉")
-                onclose();
-            } else if (formData.role === 'event_manager' && isExist == true && isExist2 == false && activeTab === 'register') {
-                console.log(`This ${formData.clubName} is not registered. Please register first.`)
-                setUniError(`This ${formData.clubName} is not registered. Please register first.`);
-
-
             }
 
-            if ((formData.role === 'general_user' && isExist == true && activeTab === 'register') || (isExist == true && formData.role === 'super_admin' && activeTab === 'register')) {
+            // 🔹 General User or Super Admin registration
+            else if (
+                activeTab === 'register' &&
+                (formData.role === 'general_user' || formData.role === 'super_admin')
+            ) {
+                if (!isExist) {
+                    setUniError(`University '${formData.universityName}' does not exist.`);
+                    return;
+                }
+
                 const res = await SignUp(email, pass);
                 if (res?.user) {
                     setUser(res.user);
-                    //   await updateProfileUser({ displayName: name, photoURL: picUrl });
-                    toast.success("Registration successful! 🎉");
+                    await axios.post('https://club-event-management-server.vercel.app/users', user);
+                    toast.success("Registration successful! 🎉", { position: "top-center" });
                     setUniError("");
-                    onclose()
+                    onclose();
                 }
-                const user = {
-                    name: formData.name,
-                    email: formData.email,
-                    password: formData.password,
-                    role: formData.role,
-                    universityName: formData.universityName,
-                }
-                axios.post('http://localhost:5000/users', user)
-                    .then(res => {
-                        console.log("User registered successfully:", res.data);
-
-                    }
-                    )
             }
 
-            if (isExist == true && isExist2 == true && activeTab === 'register' && formData.role === 'club_admin') {
-                const uni1 = data.find(item =>
-                    item.name.includes(formData.universityName)
+            // 🔹 Invalid state: Club admin trying to register an existing club
+            else if (
+                formData.role === 'club_admin' &&
+                activeTab === 'register' &&
+                isExist &&
+                isExist2
+            ) {
+                setUniError(
+                    `This '${formData.universityName}' and club '${formData.clubName}' are already registered. Please contact admin.`
                 );
+            }
 
-                const club = data2.find(item =>
-                    item?.name?.includes(formData.clubName))
-                console.log(uni1, club)
-                setUniError(`This ${uni1.name} and ${club.name} is already registered. Please contact admin or choose a different university.`);
-                console.log("University ID:", uni1._id, club);
-
-            } else if (isExist == false && activeTab === 'register') {
-                setUniError("");
-                console.log("New university, proceed with registration");
-                // Here you can POST new university data
+            // 🔹 New university case (handled silently)
+            else if (!isExist && activeTab === 'register') {
+                setUniError(`University '${formData.universityName}' is not registered.`);
+                console.log("New university, proceed with registration (optional logic here).");
             }
 
         } catch (error) {
-            console.error("Error fetching university data:", error);
+            console.error("Error in handleSubmit:", error);
+            toast.error("Something went wrong. Please try again later.");
         }
-        // setFromData()
     };
+
 
     if (!open) return null;
 
     return (
-        <div className={`${activeTab==='login'? 'absolute bottom-60 right-80  left-60 flex items-center justify-center bg-black' : 'absolute bottom-20 right-80  left-60 flex items-center justify-center bg-black'}`}>
+        <div className={`${activeTab === 'login' ? 'absolute bottom-60 right-80  left-60 flex items-center justify-center bg-black' : 'absolute bottom-20 right-80  left-60 flex items-center justify-center bg-black'}`}>
             <div className="  bg-purple-500  text-black overflow-y-auto  max-w-md p-6 rounded-lg shadow-xl ">
                 <ToastContainer />
                 <button

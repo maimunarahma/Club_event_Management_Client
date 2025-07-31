@@ -22,6 +22,7 @@ import ManageEvents from './Dashboard/ManageEvents.jsx';
 import Settings from './Dashboard/Settings.jsx';
 import Notifications from './Dashboard/Notifications.jsx';
 import ChatBot from './Routes/ChatBot.jsx';
+import SuccessPayment from './SuccessPayment.jsx';
 let router = createBrowserRouter([
   {
     path: "/",
@@ -46,6 +47,10 @@ let router = createBrowserRouter([
       {
         path: 'news',
         element: <News />
+      },
+      {
+        path:'success-payment/:trxid',
+        element:<SuccessPayment/>
       },
       {
         path: 'dashboard',

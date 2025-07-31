@@ -16,14 +16,14 @@ const Event = () => {
     useEffect(() => {
         console.log(query)
         if (query) {
-            axios.get(`http://localhost:5000/event?query=${query}`).then(res => setEvents(res.data));
+            axios.get(`https://club-event-management-server.vercel.app/event?query=${query}`).then(res => setEvents(res.data));
         }
         else {
-            axios.get('http://localhost:5000/event').then(res => setEvents(res.data));
+            axios.get('https://club-event-management-server.vercel.app/event').then(res => setEvents(res.data));
         }
-        axios.get('http://localhost:5000/club').then(res => setClubs(res.data));
-        axios.get('http://localhost:5000/uni').then(res => setUnis(res.data));
-        axios.get('http://localhost:5000/users').then(res => setAllProfiles(res.data));
+        axios.get('https://club-event-management-server.vercel.app/club').then(res => setClubs(res.data));
+        axios.get('https://club-event-management-server.vercel.app/uni').then(res => setUnis(res.data));
+        axios.get('https://club-event-management-server.vercel.app/users').then(res => setAllProfiles(res.data));
     }, [query]);
 
     const getClub = (id) => clubs.find(club => club._id === id) || { name: "Unknown Club" };
@@ -31,6 +31,7 @@ const Event = () => {
     const getProfile = (email) => allProfiles.find(p => p.email === email) || { name: "Unknown", role: "guest" };
 
     const currentUserProfile = getProfile(user?.email);
+    console.log(currentUserProfile)
     const isClubAdmin = currentUserProfile.role === 'club_admin';
     let filteredEvents = [];
 
@@ -74,7 +75,7 @@ const Event = () => {
 
 
     const updateEventStatus = (eventId, newStatus) => {
-        axios.patch(`http://localhost:5000/event/${eventId}`, { status: newStatus })
+        axios.patch(`https://club-event-management-server.vercel.app/event/${eventId}`, { status: newStatus })
             .then(() => {
                 setEvents(prev =>
                     prev.map(ev => ev._id === eventId ? { ...ev, status: newStatus } : ev)
@@ -197,7 +198,7 @@ const Event = () => {
                                     <p><strong>Club:</strong> {club.name}</p>
                                     <p><strong>Club Admin:</strong> {club.clubAdminEmail}</p>
                                     <p><strong>University:</strong> {uni.name}</p>
-                                    <Link to={`/event/${ev._id}`} state={{ ev }} userProfile={currentUserProfile}>
+                                    <Link to={`/event/${ev._id}`}  state={{ ev, userProfile: currentUserProfile }}>
                                         <button event={ev} className='btn'
                                         >
                                             Register Now

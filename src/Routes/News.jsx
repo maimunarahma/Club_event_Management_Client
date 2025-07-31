@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 const News = () => {
     const [news, setNews] = React.useState([]);
     useEffect(()=>{
-        axios.get('http://localhost:5000/news')
+        axios.get('https://club-event-management-server.vercel.app/news')
             .then(res=>{
                 setNews(res.data);
             })

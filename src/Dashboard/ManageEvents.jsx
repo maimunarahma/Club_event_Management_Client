@@ -8,15 +8,15 @@ const ManageEvents = () => {
     const [uni, setUnis] = useState([])
     const { user } = useContext(AuthContext)
     useEffect(() => {
-        axios.get('http://localhost:5000/event')
+        axios.get('https://club-event-management-server.vercel.app/event')
             .then(res => {
                 setEvents(res.data)
             })
-        axios.get('http://localhost:5000/club')
+        axios.get('https://club-event-management-server.vercel.app/club')
             .then(res => {
                 setClubs(res.data)
             })
-        axios.get('http://localhost:5000/uni')
+        axios.get('https://club-event-management-server.vercel.app/uni')
             .then(res => {
                 setUnis(res.data)
             })
