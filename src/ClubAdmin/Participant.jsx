@@ -10,6 +10,7 @@ const Participant = () => {
     const [events, setEvents] = useState([]);
     const [clubs, setClubs] = useState([]);
     const [unis, setUnis] = useState([]);
+    const [pay,setPay]=useState([])
     const [allProfiles, setAllProfiles] = useState([]);
     const { user } = useContext(AuthContext);
     let filteredEvents = [];
@@ -23,6 +24,7 @@ const Participant = () => {
         axios.get('https://club-event-management-server.onrender.com/club').then(res => setClubs(res.data));
         axios.get('https://club-event-management-server.onrender.com/uni').then(res => setUnis(res.data));
         axios.get('https://club-event-management-server.onrender.com/users').then(res => setAllProfiles(res.data));
+          axios.get('https://club-event-management-server.onrender.com/payments').then(res => setPay(res.data));
          axios.get('https://club-event-management-server.onrender.com/participants')
             .then(res => {
                 if (res.data) {
@@ -31,6 +33,12 @@ const Participant = () => {
             })
            
     }, []);
+const getclubIdClubAdmin = (email) => {
+  const club = clubs.find(c => c.clubAdminEmail === email);
+  return club ? club._id : "unknown";
+};
+   const getEventsForClubAdmin = id => events.filter(e => e.clubId === id);
+const participant=id=>pay.filter(p=>p.eventId===id)
       const getClub = (id) => clubs.find(club => club._id === id) || { name: "Unknown Club" };
     // const getUni = (id) => unis.find(uni => uni._id === id) || { name: "Unknown University" };
     const getProfile = (email) => allProfiles.find(p => p.email === email) || { name: "Unknown", role: "guest" };
@@ -50,7 +58,7 @@ const Participant = () => {
         filteredEvents = events;
     }
 console.log(filteredEvents);
- 
+//  const 
  const allClubs = filteredEvents.map(event => ({
   eventId: event._id,
   clubId: event.clubId,
@@ -61,12 +69,18 @@ console.log(filteredEvents);
     return (
     <div className="flex flex-wrap gap-4 p-4 bg-white text-purple-900 w-full">
   {profile?.role==='club_admin' && 
-    <div>
-      {events.map(e=> (
-        <h1>{e.name}</h1>
-      ))}
-    </div>
-  }
+    
+  <div>
+
+  {getEventsForClubAdmin(getclubIdClubAdmin(user?.email)).map(event =>
+    participant(event._id).map(p => (
+      <p key={p._id}>{p.userEmail}</p>
+    ))
+  )}
+</div>
+}
+
+
 
   {allClubs.map((club) => (
     <div
