@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../providers/Authentication';
+import useProfile from '../Routes/getProfile';
 // import { filteredEvents } from '../Routes/Event';
 
 const Participant = () => {
@@ -12,15 +13,17 @@ const Participant = () => {
     const [allProfiles, setAllProfiles] = useState([]);
     const { user } = useContext(AuthContext);
     let filteredEvents = [];
-
+    
+    const profile=useProfile(user?.email)
+    console.log(profile)
     useEffect(() => {
 
-        axios.get('https://club-event-management-server.vercel.app/event').then(res => setEvents(res.data));
+        axios.get('https://club-event-management-server.onrender.com/event').then(res => setEvents(res.data));
 
-        axios.get('https://club-event-management-server.vercel.app/club').then(res => setClubs(res.data));
-        axios.get('https://club-event-management-server.vercel.app/uni').then(res => setUnis(res.data));
-        axios.get('https://club-event-management-server.vercel.app/users').then(res => setAllProfiles(res.data));
-         axios.get('https://club-event-management-server.vercel.app/participants')
+        axios.get('https://club-event-management-server.onrender.com/club').then(res => setClubs(res.data));
+        axios.get('https://club-event-management-server.onrender.com/uni').then(res => setUnis(res.data));
+        axios.get('https://club-event-management-server.onrender.com/users').then(res => setAllProfiles(res.data));
+         axios.get('https://club-event-management-server.onrender.com/participants')
             .then(res => {
                 if (res.data) {
                     setParticipants(res.data);
@@ -57,6 +60,14 @@ console.log(filteredEvents);
     console.log(typeof allClubs, allClubs, Array.isArray(allClubs));
     return (
     <div className="flex flex-wrap gap-4 p-4 bg-white text-purple-900 w-full">
+  {profile?.role==='club_admin' && 
+    <div>
+      {events.map(e=> (
+        <h1>{e.name}</h1>
+      ))}
+    </div>
+  }
+
   {allClubs.map((club) => (
     <div
       key={club.eventId}

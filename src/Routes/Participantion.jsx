@@ -30,7 +30,7 @@ const Participantion = () => {
             registrationFee: ev.registrationFee
         }
         if (wished === false) {
-            axios.post(`https://club-event-management-server.vercel.app/wishlist/${user?.email}`, wish)
+            axios.post(`https://club-event-management-server.onrender.com/wishlist/${user?.email}`, wish)
                 .then(res => {
                     console.log(res)
                     if (res.data.acknowledged) {
@@ -45,7 +45,7 @@ const Participantion = () => {
         else if (wished === true) {
            
           try {
-    const res = await axios.get('https://club-event-management-server.vercel.app/wishlist');
+    const res = await axios.get('https://club-event-management-server.onrender.com/wishlist');
     const allWishes = res.data;
 
     const wish = allWishes.find(w => w.userEmail === user?.email && w.eventId === ev._id);
@@ -56,7 +56,7 @@ const Participantion = () => {
       return;
     }
 
-    const deleteRes = await axios.delete(`https://club-event-management-server.vercel.app/wishlist/${wishId}`);
+    const deleteRes = await axios.delete(`https://club-event-management-server.onrender.com/wishlist/${wishId}`);
     
     if (deleteRes.data.deletedCount > 0) {
       toast.error("Event removed from wishlist", {
@@ -84,7 +84,7 @@ const Participantion = () => {
 
         }
         console.log(payment)
-        axios.post('https://club-event-management-server.vercel.app/create-ssl-payment', payment)
+        axios.post('https://club-event-management-server.onrender.com/create-ssl-payment', payment)
             .then(res => {
 
                 console.log(res)

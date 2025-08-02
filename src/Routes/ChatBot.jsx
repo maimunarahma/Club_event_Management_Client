@@ -10,7 +10,7 @@ export default function ChatBot() {
     const userMsg = { sender: 'user', text: input };
     setMessages([...messages, userMsg]);
 
-    const res = await axios.post('https://club-event-management-server.vercel.app/chat', { message: input });
+    const res = await axios.post('https://club-event-management-server.onrender.com/chat', { message: input });
     console.log('bot reply', res.data.reply);
     const botMsg = { sender: 'bot', text: res.data.reply };
 

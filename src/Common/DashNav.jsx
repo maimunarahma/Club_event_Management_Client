@@ -9,7 +9,7 @@ const DashNav = () => {
     const { user ,signOutUser } = useContext(AuthContext)
       const [allProfiles, setAllProfiles] = useState([]);
       useEffect(() => {
-        axios.get('https://club-event-management-server.vercel.app/users').then(res => { setAllProfiles(res.data) })
+        axios.get('https://club-event-management-server.onrender.com/users').then(res => { setAllProfiles(res.data) })
       }, [])
       const getProfiler = (email) => {
         return allProfiles.find(p => p?.email === email) || { name: "Unknown User" };

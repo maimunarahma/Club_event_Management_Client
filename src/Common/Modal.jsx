@@ -52,170 +52,158 @@ const Modal = ({ open, onclose }) => {
 
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const pass = formData.password;
-        const email = formData.email;
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{4,}$/;
+ const handleSubmit = async (e) => {
+    e.preventDefault();
+    const pass = formData.password;
+    const email = formData.email;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{4,}$/;
 
-        if (!passwordRegex.test(pass)) {
-            toast.error(
-                "Password must contain at least 6 characters with uppercase and lowercase letters.",
-                { position: "top-center" }
-            );
-            return;
-        }
+    if (!passwordRegex.test(pass)) {
+        toast.error(
+            "Password must contain at least 6 characters with uppercase and lowercase letters.",
+            { position: "top-center" }
+        );
+        return;
+    }
 
-        try {
-            const [uniRes, clubRes] = await Promise.all([
-                fetch('https://club-event-management-server.vercel.app/uni'),
-                fetch('https://club-event-management-server.vercel.app/club')
-            ]);
+    try {
+        const [uniRes, clubRes] = await Promise.all([
+            axios.get('https://club-event-management-server.onrender.com/uni'),
+            axios.get('https://club-event-management-server.onrender.com/club')
+        ]);
 
-            const unis = await uniRes.json();
-            const clubs = await clubRes.json();
+        const unis = uniRes.data;
+        const clubs = clubRes.data;
 
-            const university = unis.find(item => item.name === formData.universityName);
-            const club = clubs.find(item => item?.name === formData.clubName);
+        const university = unis.find(item => item.name === formData.universityName);
+        const club = clubs.find(item => item?.name === formData.clubName);
 
-            const isExist = Boolean(university);
-            const isExist2 = Boolean(club);
+        const isExist = Boolean(university);
+        const isExist2 = Boolean(club);
 
-            const user = {
-                name: formData.name,
-                email: formData.email,
-                password: formData.password,
-                role: formData.role,
-                universityName: formData.universityName,
+        const user = {
+            name: formData.name,
+            email: formData.email,
+            password: formData.password,
+            role: formData.role,
+            universityName: formData.universityName,
+        };
+
+        // 🔹 Club Admin registration
+        if (formData.role === 'club_admin' && activeTab === 'register') {
+            if (!isExist) {
+                setUniError(`University '${formData.universityName}' does not exist.`);
+                return;
+            }
+
+            if (isExist2) {
+                setUniError(`This club '${club.name}' already exists. Contact admin or use a new name.`);
+                return;
+            }
+
+            await axios.post('https://club-event-management-server.onrender.com/users', user);
+
+            const newClub = {
+                name: formData.clubName,
+                type: formData.Type,
+                universityId: university._id,
+                clubAdminEmail: formData.email,
             };
 
-            // 🔹 Club Admin registration
-            if (formData.role === 'club_admin' && activeTab === 'register') {
-                if (!isExist) {
-                    setUniError(`University '${formData.universityName}' does not exist.`);
-                    return;
-                }
+            await axios.post('https://club-event-management-server.onrender.com/club', newClub);
 
-                if (isExist2) {
-                    setUniError(`This club '${club.name}' already exists. Contact admin or use a new name.`);
-                    return;
-                }
+            toast.success("Club Admin registered successfully! 🎉", { position: "top-center" });
+            onclose();
+        }
 
-                await fetch('https://club-event-management-server.vercel.app/users', {
-                    method: 'POST',
-                    headers: { 'Content-type': 'application/json' },
-                    body: JSON.stringify(user),
-                });
+        // 🔹 Event Manager registration
+        else if (formData.role === 'event_manager' && activeTab === 'register') {
+            if (!isExist) {
+                setUniError(`University '${formData.universityName}' does not exist.`);
+                return;
+            }
 
-                const newClub = {
-                    name: formData.clubName,
-                    type: formData.Type,
-                    universityId: university._id,
-                    clubAdminEmail: formData.email,
-                };
+            if (!isExist2) {
+                setUniError(`This club '${formData.clubName}' is not registered. Please register first.`);
+                return;
+            }
 
-                await fetch('https://club-event-management-server.vercel.app/club', {
-                    method: 'POST',
-                    headers: { 'Content-type': 'application/json' },
-                    body: JSON.stringify(newClub),
-                });
+            const event = {
+                name: formData.eventName,
+                eventManageEmail: formData.email,
+                universityId: university._id,
+                clubId: club._id,
+                eventType: formData.eventType,
+                location: formData.location,
+                registrationLink: formData.registrationLink,
+                deadline: formData.deadline,
+                eventDate: formData.eventDate,
+                prizeMoney: formData.prizeMoney,
+                registrationFee: formData.registrationFee,
+                registrationProcess: formData.registrationProcess,
+                status: 'pending'
+            };
 
-                toast.success("Club Admin registered successfully! 🎉", { position: "top-center" });
+            const res = await SignUp(email, pass);
+            if (res?.user) {
+                setUser(res.user);
+                await axios.post('https://club-event-management-server.onrender.com/event', event);
+                await axios.post('https://club-event-management-server.onrender.com/users', user);
+                toast.success("Event Manager registration successful! 🎉", { position: "top-center" });
                 onclose();
             }
-
-            // 🔹 Event Manager registration
-            else if (formData.role === 'event_manager' && activeTab === 'register') {
-                if (!isExist) {
-                    setUniError(`University '${formData.universityName}' does not exist.`);
-                    return;
-                }
-
-                if (!isExist2) {
-                    setUniError(`This club '${formData.clubName}' is not registered. Please register first.`);
-                    return;
-                }
-
-                const event = {
-                    name: formData.eventName,
-                    eventManageEmail: formData.email,
-                    universityId: university._id,
-                    clubId: club._id,
-                    eventType: formData.eventType,
-                    location: formData.location,
-                    registrationLink: formData.registrationLink,
-                    deadline: formData.deadline,
-                    eventDate: formData.eventDate,
-                    prizeMoney: formData.prizeMoney,
-                    registrationFee: formData.registrationFee,
-                    registrationProcess: formData.registrationProcess,
-                    status: 'pending'
-                };
-
-                const res = await SignUp(email, pass);
-                if (res?.user) {
-                    setUser(res.user);
-                    await fetch('https://club-event-management-server.vercel.app/event', {
-                        method: 'POST',
-                        headers: { 'Content-type': 'application/json' },
-                        body: JSON.stringify(event),
-                    });
-                    await axios.post('https://club-event-management-server.vercel.app/users', user);
-                    toast.success("Event Manager registration successful! 🎉", { position: "top-center" });
-                    onclose();
-                }
-            }
-
-            // 🔹 General User or Super Admin registration
-            else if (
-                activeTab === 'register' &&
-                (formData.role === 'general_user' || formData.role === 'super_admin')
-            ) {
-                if (!isExist) {
-                    setUniError(`University '${formData.universityName}' does not exist.`);
-                    return;
-                }
-
-                const res = await SignUp(email, pass);
-                if (res?.user) {
-                    setUser(res.user);
-                    await axios.post('https://club-event-management-server.vercel.app/users', user);
-                    toast.success("Registration successful! 🎉", { position: "top-center" });
-                    setUniError("");
-                    onclose();
-                }
-            }
-
-            // 🔹 Invalid state: Club admin trying to register an existing club
-            else if (
-                formData.role === 'club_admin' &&
-                activeTab === 'register' &&
-                isExist &&
-                isExist2
-            ) {
-                setUniError(
-                    `This '${formData.universityName}' and club '${formData.clubName}' are already registered. Please contact admin.`
-                );
-            }
-
-            // 🔹 New university case (handled silently)
-            else if (!isExist && activeTab === 'register') {
-                setUniError(`University '${formData.universityName}' is not registered.`);
-                console.log("New university, proceed with registration (optional logic here).");
-            }
-
-        } catch (error) {
-            console.error("Error in handleSubmit:", error);
-            toast.error("Something went wrong. Please try again later.");
         }
-    };
+
+        // 🔹 General User or Super Admin registration
+        else if (
+            activeTab === 'register' &&
+            (formData.role === 'general_user' || formData.role === 'super_admin')
+        ) {
+            if (!isExist) {
+                setUniError(`University '${formData.universityName}' does not exist.`);
+                return;
+            }
+
+            const res = await SignUp(email, pass);
+            if (res?.user) {
+                setUser(res.user);
+                await axios.post('https://club-event-management-server.onrender.com/users', user);
+                toast.success("Registration successful! 🎉", { position: "top-center" });
+                setUniError("");
+                onclose();
+            }
+        }
+
+        // 🔹 Invalid state
+        else if (
+            formData.role === 'club_admin' &&
+            activeTab === 'register' &&
+            isExist &&
+            isExist2
+        ) {
+            setUniError(
+                `This '${formData.universityName}' and club '${formData.clubName}' are already registered. Please contact admin.`
+            );
+        }
+
+        // 🔹 New university case (optional handling)
+        else if (!isExist && activeTab === 'register') {
+            setUniError(`University '${formData.universityName}' is not registered.`);
+            console.log("New university, proceed with registration (optional logic here).");
+        }
+
+    } catch (error) {
+        console.error("Error in handleSubmit:", error);
+        toast.error("Something went wrong. Please try again later.");
+    }
+};
 
 
     if (!open) return null;
 
     return (
-        <div className={`${activeTab === 'login' ? 'absolute bottom-60 right-80  left-60 flex items-center justify-center bg-black' : 'absolute bottom-20 right-80  left-60 flex items-center justify-center bg-black'}`}>
-            <div className="  bg-purple-500  text-black overflow-y-auto  max-w-md p-6 rounded-lg shadow-xl ">
+<div className={`${activeTab === 'login' ? 'mt-20' : 'mt-60'} right-80 left-60 flex items-center justify-center`}>
+                <div className="  bg-purple-500  text-black overflow-y-auto  max-w-md p-6 rounded-lg shadow-xl ">
                 <ToastContainer />
                 <button
                     onClick={onclose}

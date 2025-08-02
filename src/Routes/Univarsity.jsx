@@ -35,7 +35,7 @@ const University= ({university}) => {
 const UniversityGridPage = () => {
     const [uni, setuni]=useState([]);
     useEffect(()=>{
-      axios.get('https://club-event-management-server.vercel.app/uni')
+      axios.get('https://club-event-management-server.onrender.com/uni')
         .then(res=>{
           setuni(res.data)
     },[])

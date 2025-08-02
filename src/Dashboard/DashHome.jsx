@@ -22,10 +22,10 @@ const DashHome = () => {
   });
 
   useEffect(() => {
-    axios.get('https://club-event-management-server.vercel.app/users').then(res => { setAllProfiles(res.data) })
-    axios.get('https://club-event-management-server.vercel.app/club').then(res => { setAllClub(res.data) })
-    axios.get('https://club-event-management-server.vercel.app/event').then(res => { setAllEvent(res.data) })
-    axios.get('https://club-event-management-server.vercel.app/participants').then(res => setAllParticipants(res.data))
+    axios.get('https://club-event-management-server.onrender.com/users').then(res => { setAllProfiles(res.data) })
+    axios.get('https://club-event-management-server.onrender.com/club').then(res => { setAllClub(res.data) })
+    axios.get('https://club-event-management-server.onrender.com/event').then(res => { setAllEvent(res.data) })
+    axios.get('https://club-event-management-server.onrender.com/participants').then(res => setAllParticipants(res.data))
     
   }, [])
   const getProfiler = (email) => {
@@ -66,7 +66,7 @@ const DashHome = () => {
           club:e.target.club_name.value,
 
     }
-    axios.put('https://club-event-management-server.vercel.app/invite',invited)
+    axios.put('https://club-event-management-server.onrender.com/invite',invited)
     .then(res=>{
       console.log(res.data);
       toast.success('invited successfully',{
@@ -92,7 +92,8 @@ const DashHome = () => {
       status:e.target.status.value,
     }
     console.log(event);
-    axios.post('https://club-event-management-server.vercel.app/event',event) .then(res=> {setAllEvent(res.data);  toast.success('success',{ position:'top-center'}); })
+    axios.post('https://club-event-management-server.onrender.com/event',event) .then(res=> {setAllEvent(res.data); 
+       toast.success('success',{ position:'top-center'}); })
   }
   return (
     <div>

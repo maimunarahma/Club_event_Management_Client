@@ -6,7 +6,7 @@ const Notifications = () => {
     const [allInvited,setAllinvited]=useState([])
       const {user}=useContext(AuthContext)
   useEffect(()=>{
-    axios.get('https://club-event-management-server.vercel.app/invite') .then(res=> { console.log("📦 All invited data:", res.data); setAllinvited(res.data)})
+    axios.get('https://club-event-management-server.onrender.com/invite') .then(res=> { console.log("📦 All invited data:", res.data); setAllinvited(res.data)})
   },[])
  
   const notifyFor=()=>{

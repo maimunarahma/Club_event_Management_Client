@@ -11,7 +11,7 @@ const SuccessPayment = () => {
   const { trxid} = params;
   console.log(profile, params, trxid)
   useEffect(() => {
-  axios.get(`https://club-event-management-server.vercel.app/payments/${profile.email}/${trxid}`)
+  axios.get(`https://club-event-management-server.onrender.com/payments/${profile.email}/${trxid}`)
       .then(res => {setTransaction(res.data)});
   }, [trxid]);
 

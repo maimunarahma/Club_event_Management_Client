@@ -23,6 +23,9 @@ import Settings from './Dashboard/Settings.jsx';
 import Notifications from './Dashboard/Notifications.jsx';
 import ChatBot from './Routes/ChatBot.jsx';
 import SuccessPayment from './SuccessPayment.jsx';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 let router = createBrowserRouter([
   {
     path: "/",
@@ -85,9 +88,10 @@ let router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+     <QueryClientProvider client={queryClient}>
     <Authentication>
       <RouterProvider router={router} />
     </Authentication>
-
+</QueryClientProvider>
   </StrictMode>,
 )

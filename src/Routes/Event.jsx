@@ -4,27 +4,50 @@ import { AuthContext } from '../providers/Authentication';
 import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
+import { useQuery } from '@tanstack/react-query';
+
+
+
 const Event = () => {
-    const [events, setEvents] = useState([]);
-    const [clubs, setClubs] = useState([]);
-    const [unis, setUnis] = useState([]);
-    const [allProfiles, setAllProfiles] = useState([]);
-    const [dateRange, setDateRange] = useState(false);
-    const [query, setQuery] = useState("");
+     const [dateRange, setDateRange] = useState(false);
+      const [query, setQuery] = useState('');
+const { data: events = [], isLoading: loadingEvents } = useQuery({
+  queryKey: ['events', query],
+  queryFn: () => fetchEvents(query),
+});
+  const { data: clubs = [] } = useQuery({
+    queryKey:['clubs', query],
+    queryFn:()=>fetchClubs(query)
+  });
+  const { data: unis = [] } = useQuery({
+    queryKey:['unis',query],
+    queryFn:()=> fetchUnis(query)
+});
+  const { data: allProfiles = [] } = useQuery({
+    queryKey:['users',query],
+    queryFn:()=> fetchUsers(query)});
+
     const { user } = useContext(AuthContext);
     const [type, setType]=useState(false)
-    useEffect(() => {
-        console.log(query)
-        if (query) {
-            axios.get(`https://club-event-management-server.vercel.app/event?query=${query}`).then(res => setEvents(res.data));
-        }
-        else {
-            axios.get('https://club-event-management-server.vercel.app/event').then(res => setEvents(res.data));
-        }
-        axios.get('https://club-event-management-server.vercel.app/club').then(res => setClubs(res.data));
-        axios.get('https://club-event-management-server.vercel.app/uni').then(res => setUnis(res.data));
-        axios.get('https://club-event-management-server.vercel.app/users').then(res => setAllProfiles(res.data));
-    }, [query]);
+  const fetchEvents = async (query) => {
+  const res = await axios.get(`https://club-event-management-server.onrender.com/event${query ? `?query=${query}` : ''}`);
+  return res.data;
+};
+
+const fetchClubs = async () => {
+  const res = await axios.get('https://club-event-management-server.onrender.com/club');
+  return res.data;
+};
+
+const fetchUnis = async () => {
+  const res = await axios.get('https://club-event-management-server.onrender.com/uni');
+  return res.data;
+};
+
+const fetchUsers = async () => {
+  const res = await axios.get('https://club-event-management-server.onrender.com/users');
+  return res.data;
+};
 
     const getClub = (id) => clubs.find(club => club._id === id) || { name: "Unknown Club" };
     const getUni = (id) => unis.find(uni => uni._id === id) || { name: "Unknown University" };
@@ -75,7 +98,7 @@ const Event = () => {
 
 
     const updateEventStatus = (eventId, newStatus) => {
-        axios.patch(`https://club-event-management-server.vercel.app/event/${eventId}`, { status: newStatus })
+        axios.patch(`https://club-event-management-server.onrender.com/event/${eventId}`, { status: newStatus })
             .then(() => {
                 setEvents(prev =>
                     prev.map(ev => ev._id === eventId ? { ...ev, status: newStatus } : ev)

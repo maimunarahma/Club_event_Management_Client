@@ -9,12 +9,15 @@ const Settings = () => {
       const {user}=useContext(AuthContext)
     //   console.log(user);
   useEffect(()=>{
-    axios.get('https://club-event-management-server.vercel.app/club')
+    axios.get('https://club-event-management-server.onrender.com/club')
     .then(res=>{
         setAllClub(res.data)
     })
   })
   const club=allclub.find(c=>c?.clubAdminEmail===user?.email)
+  const handleUpdateProfile=async()=>{
+   
+  }
     return (
      
           <div className="p-6 bg-white w-1/2 min-h-screen text-purple-800">
@@ -56,7 +59,7 @@ const Settings = () => {
               className="w-full bg-gray-100 border border-purple-200 rounded-xl px-4 py-2"
             />
 
-            <button className="mt-6 bg-purple-600 text-white px-6 py-2 rounded-xl">
+            <button className="mt-6 bg-purple-600 text-white px-6 py-2 rounded-xl" onClick={handleUpdateProfile}>
               Update Profile
             </button>
           </div>

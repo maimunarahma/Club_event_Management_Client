@@ -8,15 +8,15 @@ const ManageEvents = () => {
     const [uni, setUnis] = useState([])
     const { user } = useContext(AuthContext)
     useEffect(() => {
-        axios.get('https://club-event-management-server.vercel.app/event')
+        axios.get('https://club-event-management-server.onrender.com/event')
             .then(res => {
                 setEvents(res.data)
             })
-        axios.get('https://club-event-management-server.vercel.app/club')
+        axios.get('https://club-event-management-server.onrender.com/club')
             .then(res => {
                 setClubs(res.data)
             })
-        axios.get('https://club-event-management-server.vercel.app/uni')
+        axios.get('https://club-event-management-server.onrender.com/uni')
             .then(res => {
                 setUnis(res.data)
             })
@@ -64,6 +64,7 @@ const ManageEvents = () => {
             <h1>Fee: {e.registrationFee}</h1>
             <h1>Process: {e.registrationProcess}</h1>
             <h1>Status: <span className={`font-semibold ${e.status === 'Open' ? 'text-green-600' : 'text-red-600'}`}>{e.status}</span></h1>
+            <button>Edit Event</button>
           </div>
         </div>
       ))}

@@ -8,7 +8,7 @@ const useProfile = () => {
   const [currentUserProfile, setCurrentUserProfile] = useState({ name: 'Unknown', role: 'guest' });
 
   useEffect(() => {
-    axios.get('https://club-event-management-server.vercel.app/users')
+    axios.get('https://club-event-management-server.onrender.com/users')
       .then(res => {
         setAllProfiles(res.data);
         const found = res.data.find(p => p.email === user?.email);
