@@ -33,14 +33,7 @@ const Participant = () => {
             })
            
     }, []);
-const getclubIdClubAdmin = (email) => {
-  const club = clubs.find(c => c.clubAdminEmail === email);
-  return club ? club._id : "unknown";
-};
-   const getEventsForClubAdmin = id => events.filter(e => e.clubId === id);
-const participant=id=>pay.filter(p=>p.eventId===id)
-      const getClub = (id) => clubs.find(club => club._id === id) || { name: "Unknown Club" };
-    // const getUni = (id) => unis.find(uni => uni._id === id) || { name: "Unknown University" };
+  const getClub = (id) => clubs.find(club => club._id === id) || { name: "Unknown Club" };    // const getUni = (id) => unis.find(uni => uni._id === id) || { name: "Unknown University" };
     const getProfile = (email) => allProfiles.find(p => p.email === email) || { name: "Unknown", role: "guest" };
         const currentUserProfile = getProfile(user?.email);
             const isClubAdmin = currentUserProfile.role === 'club_admin';
@@ -65,21 +58,39 @@ console.log(filteredEvents);
   participants: participants?.participants?.filter(p => p.eventId === event._id)
 }));
 
-    console.log(typeof allClubs, allClubs, Array.isArray(allClubs));
+    // console.log(typeof allClubs, allClubs, Array.isArray(allClubs));
+      const userCLubs = clubs.filter(c => c?.clubAdminEmail === user?.email);
+  const clubIds = userCLubs.map(c => c._id)
+    const getEvent = events.filter(e => clubIds.includes(e?.clubId));
+    console.log(getEvent)
     return (
     <div className="flex flex-wrap gap-4 p-4 bg-white text-purple-900 w-full">
-  {profile?.role==='club_admin' && 
-    
-  <div>
-
-  {getEventsForClubAdmin(getclubIdClubAdmin(user?.email)).map(event =>
-    participant(event._id).map(p => (
-      <p key={p._id}>{p.userEmail}</p>
-    ))
-  )}
-</div>
-}
-
+ 
+{profile?.role === 'club_admin' && (
+  <div className="space-y-6 w-full">
+    {getEvent.map((c, i) => (
+      <div key={i} className="bg-white shadow-md rounded-lg p-5 border border-purple-200">
+        <h2 className="text-lg font-bold text-purple-800 mb-3">Event: {c.name}</h2>
+        
+        {c?.participants && c.participants.length > 0 ? (
+          <div className="space-y-2">
+            {c.participants.map((p, j) => (
+              <div
+                key={`${i}-${j}`}
+                className="bg-purple-50 border border-purple-300 rounded-md p-3"
+              >
+                <p><span className="font-semibold">Email:</span> {p?.email}</p>
+                <p><span className="font-semibold">University:</span> {p?.university}</p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-500">No participants yet.</p>
+        )}
+      </div>
+    ))}
+  </div>
+)}
 
 
   {allClubs.map((club) => (
@@ -87,10 +98,7 @@ console.log(filteredEvents);
       key={club.eventId}
       className="bg-purple-100 rounded-xl shadow-md p-4 w-full md:w-1/2 lg:w-1/3"
     >
-      <h3 className="text-lg font-semibold mb-2 text-purple-700">
-        {getClub(club.clubId)?.name}
-      </h3>
-
+  
       {club.participants?.length > 0 && (
         <ul className="space-y-3">
           {club.participants.map((p, index) => (

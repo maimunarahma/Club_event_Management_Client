@@ -24,20 +24,28 @@ import Notifications from './Dashboard/Notifications.jsx';
 import ChatBot from './Routes/ChatBot.jsx';
 import SuccessPayment from './SuccessPayment.jsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import NotFound from './Common/NotFound.jsx';
+import Club from './Routes/Club.jsx';
 
 const queryClient = new QueryClient();
 let router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <NotFound />,
     children: [
       {
         path: '',         // equivalent to '/' at this level
-        element: <Banner />
+        element: <Banner />,
+
       },
+
       {
         path: 'uni',
         element: <UniversityGridPage />
+      }, {
+        path: 'club',
+        element: <Club/>
       },
       {
         path: 'event',
@@ -52,8 +60,8 @@ let router = createBrowserRouter([
         element: <News />
       },
       {
-        path:'success-payment/:trxid',
-        element:<SuccessPayment/>
+        path: 'success-payment/:trxid',
+        element: <SuccessPayment />
       },
       {
         path: 'dashboard',
@@ -61,7 +69,7 @@ let router = createBrowserRouter([
         children: [
           {
             path: '',
-            element: <Private><DashHome/></Private>
+            element: <Private><DashHome /></Private>
           },
 
           {
@@ -70,15 +78,15 @@ let router = createBrowserRouter([
           },
           {
             path: 'manage-events',
-            element: <Private><ManageEvents/></Private>
+            element: <Private><ManageEvents /></Private>
           },
           {
-            path:'settings',
-            element:<Settings/>
+            path: 'settings',
+            element: <Settings />
           },
           {
-            path:'notifications',
-            element:<Notifications/>
+            path: 'notifications',
+            element: <Notifications />
           },
         ]
       },
@@ -88,10 +96,10 @@ let router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-     <QueryClientProvider client={queryClient}>
-    <Authentication>
-      <RouterProvider router={router} />
-    </Authentication>
-</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <Authentication>
+        <RouterProvider router={router} />
+      </Authentication>
+    </QueryClientProvider>
   </StrictMode>,
 )

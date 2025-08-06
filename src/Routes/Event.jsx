@@ -5,49 +5,59 @@ import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 import { useQuery } from '@tanstack/react-query';
+import {
+    MdCategory,
+    MdLocationOn,
+    MdCalendarToday,
+    MdOutlineAccessTime,
+    MdEmojiEvents,
+    MdAttachMoney,
+    MdEmail
+} from 'react-icons/md';
 
 
 
 const Event = () => {
-     const [dateRange, setDateRange] = useState(false);
-      const [query, setQuery] = useState('');
-const { data: events = [], isLoading: loadingEvents } = useQuery({
-  queryKey: ['events', query],
-  queryFn: () => fetchEvents(query),
-});
-  const { data: clubs = [] } = useQuery({
-    queryKey:['clubs', query],
-    queryFn:()=>fetchClubs(query)
-  });
-  const { data: unis = [] } = useQuery({
-    queryKey:['unis',query],
-    queryFn:()=> fetchUnis(query)
-});
-  const { data: allProfiles = [] } = useQuery({
-    queryKey:['users',query],
-    queryFn:()=> fetchUsers(query)});
+    const [dateRange, setDateRange] = useState(false);
+    const [query, setQuery] = useState('');
+    const { data: events = [], isLoading: loadingEvents } = useQuery({
+        queryKey: ['events', query],
+        queryFn: () => fetchEvents(query),
+    });
+    const { data: clubs = [] } = useQuery({
+        queryKey: ['clubs', query],
+        queryFn: () => fetchClubs(query)
+    });
+    const { data: unis = [] } = useQuery({
+        queryKey: ['unis', query],
+        queryFn: () => fetchUnis(query)
+    });
+    const { data: allProfiles = [] } = useQuery({
+        queryKey: ['users', query],
+        queryFn: () => fetchUsers(query)
+    });
 
     const { user } = useContext(AuthContext);
-    const [type, setType]=useState(false)
-  const fetchEvents = async (query) => {
-  const res = await axios.get(`https://club-event-management-server.onrender.com/event${query ? `?query=${query}` : ''}`);
-  return res.data;
-};
+    const [type, setType] = useState(false)
+    const fetchEvents = async (query) => {
+        const res = await axios.get(`https://club-event-management-server.onrender.com/event${query ? `?query=${query}` : ''}`);
+        return res.data;
+    };
 
-const fetchClubs = async () => {
-  const res = await axios.get('https://club-event-management-server.onrender.com/club');
-  return res.data;
-};
+    const fetchClubs = async () => {
+        const res = await axios.get('https://club-event-management-server.onrender.com/club');
+        return res.data;
+    };
 
-const fetchUnis = async () => {
-  const res = await axios.get('https://club-event-management-server.onrender.com/uni');
-  return res.data;
-};
+    const fetchUnis = async () => {
+        const res = await axios.get('https://club-event-management-server.onrender.com/uni');
+        return res.data;
+    };
 
-const fetchUsers = async () => {
-  const res = await axios.get('https://club-event-management-server.onrender.com/users');
-  return res.data;
-};
+    const fetchUsers = async () => {
+        const res = await axios.get('https://club-event-management-server.onrender.com/users');
+        return res.data;
+    };
 
     const getClub = (id) => clubs.find(club => club._id === id) || { name: "Unknown Club" };
     const getUni = (id) => unis.find(uni => uni._id === id) || { name: "Unknown University" };
@@ -71,17 +81,17 @@ const fetchUsers = async () => {
         filteredEvents = events;
     }
 
-   const handleType=()=>{
-    setType(!type)
-    setDateRange('')
-   }
+    const handleType = () => {
+        setType(!type)
+        setDateRange('')
+    }
 
     const handleDateRangeChange = () => {
         setDateRange(!dateRange);
         setType('')
     }
     const handleStatusChange = (eventId, newStatus, currentStatus) => {
-       
+
         Swal.fire({
             title: "Are you sure?",
             text: "Do you want to accept this event?",
@@ -138,12 +148,12 @@ const fetchUsers = async () => {
                             <span className="ml-1">&#9662;</span>
                         </button>
 
-                      {
-                        type && 
-                          <div className="absolute right-40 mt-2 w-56 rounded-md  bg-white ring-1 ring-black ring-opacity-5 z-50">
+                        {
+                            type &&
+                            <div className="absolute right-40 mt-2 w-56 rounded-md  bg-white ring-1 ring-black ring-opacity-5 z-50">
                                 <div className="py-1 font-semibold  bg-purple-600 text-white  ">
 
-                                
+
                                     <button className="block w-full px-4 py-2 text-left bg-purple-600 text-white hover:bg-accent hover:text-grey-500" onClick={() => setQuery('all')}>All</button>
 
                                     <button className="block w-full px-4 py-2 text-left bg-purple-600 text-white hover:bg-accent" onClick={() => setQuery('seminar')}>Seminar</button>
@@ -151,14 +161,14 @@ const fetchUsers = async () => {
                                     <button className="block w-full px-4 py-2 text-left hover:bg-accent" onClick={() => setQuery('workshop')}>Workshop</button>
                                     <button className="block w-full px-4 py-2 text-left hover:bg-accent" onClick={() => setQuery('competition')}>Competition</button>
                                     <button className="block w-full px-4 py-2 text-left  hover:bg-accent" onClick={() => setQuery('webinar')}>Webinar</button>
-                                     <button className="block w-full px-4 py-2 text-left  hover:bg-accent" onClick={() => setQuery('hackathon')}>Hackathon</button>
-                                      <button className="block w-full px-4 py-2 text-left  hover:bg-accent">Cultural Program</button>
-                                       <button className="block w-full px-4 py-2 text-left  hover:bg-accent" onClick={() => setQuery('sports')}>Sports</button>
-                                        <button className="block w-full px-4 py-2 text-left  hover:bg-accent">Social Awareness</button>
-                                         <button className="block w-full px-4 py-2 text-left  hover:bg-accent">Tech Talk</button>
+                                    <button className="block w-full px-4 py-2 text-left  hover:bg-accent" onClick={() => setQuery('hackathon')}>Hackathon</button>
+                                    <button className="block w-full px-4 py-2 text-left  hover:bg-accent">Cultural Program</button>
+                                    <button className="block w-full px-4 py-2 text-left  hover:bg-accent" onClick={() => setQuery('sports')}>Sports</button>
+                                    <button className="block w-full px-4 py-2 text-left  hover:bg-accent">Social Awareness</button>
+                                    <button className="block w-full px-4 py-2 text-left  hover:bg-accent">Tech Talk</button>
                                 </div>
                             </div>
-                      }
+                        }
 
                         {dateRange &&
                             <div className="absolute -right-10 mt-2 w-56 rounded-md  bg-white ring-1 ring-black ring-opacity-5 z-50">
@@ -190,44 +200,74 @@ const fetchUsers = async () => {
                             const uni = getUni(club.universityId);
 
                             return (
-                                <div key={ev._id || index} className="col-span-1 space-y-4 p-6 shadow-lg rounded-xl bg-white">
-                                    <h1 className="text-2xl font-bold mb-4">{ev.name}</h1>
-                                    <p className='flex justify-start items-center gap-4'><img src="/genres.png" alt="" className='w-15 h-10' title="Event Type" /> <strong>{ev.eventType}</strong></p>
-                                    <p className='flex justify-start items-center gap-4'><img src="/map.png" alt="" className='w-15 h-10' title='location' /><strong> {ev.location}</strong></p>
-                                    <p className='flex justify-start items-center gap-4'><img src="/calendar.png" alt="" className='w-15 h-10' title='event date' /><strong> {new Date(ev.eventDate).toLocaleString()}</strong></p>
-                                    <p className='flex justify-start items-center gap-4'><img src="deadline.png" alt="" className='w-15 h-10' title='registration deadline' /><strong>{ev.deadline}</strong> </p>
-                                    <p><strong>Managed by:</strong> {ev.eventManageEmail}</p>
-                                    <p><strong>Prize:</strong> ${ev.prizeMoney}k</p>
-                                    <p><strong>Fee:</strong> ${ev.registrationFee}</p>
-                                    {
-                                        getProfile(user?.email).role === 'club_admin' ?
-                                            (
+                                <div key={ev._id || index} className="col-span-1 space-y-4 p-6 shadow-lg rounded-xl bg-white border border-gray-200">
+                                    <h1 className="text-2xl font-bold text-purple-700 mb-4">{ev.name}</h1>
 
-                                                <div className="mt-4">
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Change Status:</label>
-                                                    <h1>{getProfile(getClub(ev.clubId).clubAdminEmail).role}</h1>
-                                                    <select
-                                                        value={ev.status}
-                                                        onChange={e => handleStatusChange(ev._id, e.target.value, ev.status)}
-                                                        className="p-2 border rounded"
-                                                    >
-                                                        <option value="pending">Pending</option>
-                                                        <option value="accepted">Accepted</option>
-                                                    </select>
-                                                </div>) :
-                                            <h1>{ev.status}</h1>
+                                    <p className='flex items-center gap-2 text-gray-700'>
+                                        <MdCategory className="text-xl text-blue-500" title="Event Type" />
+                                        <strong>{ev.eventType}</strong>
+                                    </p>
+
+                                    <p className='flex items-center gap-2 text-gray-700'>
+                                        <MdLocationOn className="text-xl text-red-500" title="Location" />
+                                        <strong>{ev.location}</strong>
+                                    </p>
+
+                                    <p className='flex items-center gap-2 text-gray-700'>
+                                        <MdCalendarToday className="text-xl text-green-600" title="Event Date" />
+                                        <strong>{new Date(ev.eventDate).toLocaleString()}</strong>
+                                    </p>
+
+                                    <p className='flex items-center gap-2 text-gray-700'>
+                                        <MdOutlineAccessTime className="text-xl text-yellow-600" title="Registration Deadline" />
+                                        <strong>{ev.deadline}</strong>
+                                    </p>
+
+                                    <p className='flex items-center gap-2 text-gray-700'>
+                                        <MdEmail className="text-xl text-purple-600" title="Manager" />
+                                        <strong>Managed by:</strong> {ev.eventManageEmail}
+                                    </p>
+
+                                    <p className='flex items-center gap-2 text-gray-700'>
+                                        <MdEmojiEvents className="text-xl text-orange-500" title="Prize" />
+                                        <strong>Prize:</strong> ${ev.prizeMoney}k
+                                    </p>
+
+                                    <p className='flex items-center gap-2 text-gray-700'>
+                                        <MdAttachMoney className="text-xl text-green-700" title="Fee" />
+                                        <strong>Fee:</strong> ${ev.registrationFee}
+                                    </p>
+
+                                    {
+                                        getProfile(user?.email).role === 'club_admin' ? (
+                                            <div className="mt-4">
+                                                <label className="block text-sm font-medium text-gray-700 mb-1">Change Status:</label>
+                                                <h1>{getProfile(getClub(ev.clubId).clubAdminEmail).role}</h1>
+                                                <select
+                                                    value={ev.status}
+                                                    onChange={e => handleStatusChange(ev._id, e.target.value, ev.status)}
+                                                    className="p-2 border rounded bg-gray-50"
+                                                >
+                                                    <option value="pending">Pending</option>
+                                                    <option value="accepted">Accepted</option>
+                                                </select>
+                                            </div>
+                                        ) : (
+                                            <h1><strong>Status:</strong> {ev.status}</h1>
+                                        )
                                     }
 
                                     <p><strong>Club:</strong> {club.name}</p>
                                     <p><strong>Club Admin:</strong> {club.clubAdminEmail}</p>
                                     <p><strong>University:</strong> {uni.name}</p>
-                                    <Link to={`/event/${ev._id}`}  state={{ ev, userProfile: currentUserProfile }}>
-                                        <button event={ev} className='btn'
-                                        >
+
+                                    <Link to={`/event/${ev._id}`} state={{ ev, userProfile: currentUserProfile }}>
+                                        <button event={ev} className='w-full py-2 mt-3 bg-purple-600 text-white rounded hover:bg-purple-700 transition'>
                                             Register Now
                                         </button>
                                     </Link>
                                 </div>
+
                             );
                         })
                     ) : (

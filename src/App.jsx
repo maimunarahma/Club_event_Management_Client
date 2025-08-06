@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom"
 import Nav from "./Common/Nav"
+import Footer from "./Common/Footer"
 
 function App() {
 
@@ -8,7 +9,7 @@ function App() {
     <div className="w-auto mx-auto">
    <Nav/>
    <Outlet/>
-
+   <Footer/>
       
     </div>
   )

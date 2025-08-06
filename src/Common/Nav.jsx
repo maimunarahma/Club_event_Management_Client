@@ -37,6 +37,7 @@ const Nav = () => {
                             className="text-purple-600 font-semibold text-lg menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
                             <li><Link to="/">Home</Link></li>
                             <li><Link to="/event">Event</Link></li>
+                             <li><Link to="/club">Clubs</Link></li>
                             <li><Link to="/champs">Champios</Link></li>
                             <li><Link to="/news">News</Link></li>
                             <li><Link to="/uni">Universities</Link></li>
@@ -45,7 +46,7 @@ const Nav = () => {
                             <>
                                 <p>{getProfile(user.email).name}</p>
 
-                                <Link to='/dashboard'><li><a>Dashboard</a></li></Link>
+                                <Link to='/dashboard'><li>Dashboard</li></Link>
                                 {/* { 
                                 getProfile(user.email).role==='club_admin' && 
                                   <li><Link to="/uni">Pending Events</Link></li>
@@ -72,16 +73,17 @@ const Nav = () => {
                     <ul className="menu menu-horizontal px-1 text-purple-600 font-semibold text-lg flex items-center gap-4">
                         <li><Link to="/">Home</Link></li>
                         <li><Link to="/event">Event</Link></li>
+                          <li><Link to="/club">Clubs</Link></li>
                         <li><Link to="/champs">Champios</Link></li>
                         <li><Link to="/news">News</Link></li>
                         <li><Link to="/uni">Universities</Link></li>
-                                                <li><Link to="/chat">ChatBot</Link></li>
+                                             
                         {
                             user && user?.email &&
                             <>
                                 <p>{getProfile(user.email).name}</p>
 
-                                <Link to='/dashboard'><li><a>Dashboard</a></li></Link>
+                                <Link to='/dashboard'><li>Dashboard</li></Link>
                                 {/* { 
                                 getProfile(user.email).role==='club_admin' && 
                                   <li><Link to="/uni">Pending Events</Link></li>

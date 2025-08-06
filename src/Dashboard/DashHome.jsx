@@ -10,9 +10,11 @@ const DashHome = () => {
   const [allClub, setAllClub] = useState([])
   const [allEvent, setAllEvent] = useState([])
   const [allParticipants, setAllParticipants] = useState([])
+  const [uni,setUni]=useState([])
   const [editEvent, setEditEvent] = useState(false)
   const[invite,setInvite]=useState(false)
   const [createEvent, setCreateEvent]=useState(false)
+  const[favourites,setFavourites]=useState([])
   const [formData, setFormData] = useState({
     name: event?.name || "",
     date: event?.date || "",
@@ -26,7 +28,8 @@ const DashHome = () => {
     axios.get('https://club-event-management-server.onrender.com/club').then(res => { setAllClub(res.data) })
     axios.get('https://club-event-management-server.onrender.com/event').then(res => { setAllEvent(res.data) })
     axios.get('https://club-event-management-server.onrender.com/participants').then(res => setAllParticipants(res.data))
-    
+     axios.get('https://club-event-management-server.onrender.com/uni').then(res => setUni(res.data))
+      axios.get('https://club-event-management-server.onrender.com/favourites').then(res => setFavourites(res.data))
   }, [])
   const getProfiler = (email) => {
     return allProfiles.find(p => p?.email === email) || { name: "Unknown User" };
@@ -37,14 +40,32 @@ const DashHome = () => {
   const getEvent = email => {
     return allEvent.find(e => e?.eventManageEmail === user?.email)
   }
-  console.log(typeof getClub(user?.email));
+  
   const getClubById = id => {
     return allClub.find(c => c?._id === id)
   }
   const getParticipant = email => {
     return allParticipants?.participants?.filter(p => p?.eventManageEmail === user?.email)
   }
+  const getUni=id=>{
+    return uni?.find(u=>u._id===id)
+  }
+ const favCount = favourites.filter(f => f?.email === user?.email && f?.isFavourite === true).length;
 
+    const user1 = {
+    name: "Maimuna",
+    joinedEvents: 7,
+    favoriteClubs: 3,
+    certificates: 2,
+    notifications: [
+      "You have successfully registered for 'HackFest 2025'",
+      "Reminder: 'TechTalk with Arif' is tomorrow at 5PM",
+    ],
+    upcomingEvents: [
+      { title: "Design Sprint", date: "Aug 10", time: "3:00 PM" },
+      { title: "AI Workshop", date: "Aug 15", time: "11:00 AM" },
+    ],
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -106,7 +127,7 @@ const DashHome = () => {
                 <div className="mb-6">
                   <h1 className="text-3xl font-bold">Welcome, {getProfiler(user?.email)?.name || getProfiler(user?.email)?.email} 👋</h1>
                   <p className="text-purple-600 mt-2">
-                    Managing <strong>{getClub(user?.email)?.name}</strong> at <strong>{getClub(user?.email)?.universityId}</strong>
+                    Managing <strong>{getClub(user?.email)?.name}</strong> at <strong>{getUni(getClub(user?.email)?.universityId).name}</strong>
                   </p>
                   <ToastContainer/>
                 </div>
@@ -243,6 +264,58 @@ const DashHome = () => {
   }
           </div>
         )
+      }
+      {
+        getProfiler(user?.email)?.role==='general_user' && <div className=" p-6 bg-gray-50">
+      {/* Welcome Section */}
+      <header className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-800">
+          👋 Welcome, {user1.name}!
+        </h1>
+        <p className="text-gray-600">Here's a summary of your club activities</p>
+      </header>
+
+      {/* Overview Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div className="bg-white p-4 rounded shadow">
+          <h2 className="text-lg font-semibold">🎯 Events Joined</h2>
+          <p className="text-3xl font-bold text-blue-600">{user1.joinedEvents}</p>
+        </div>
+        <div className="bg-white p-4 rounded shadow">
+          <h2 className="text-lg font-semibold">⭐ Favorite Clubs</h2>
+          <p className="text-3xl font-bold text-yellow-500">{favCount}</p>
+        </div>
+        <div className="bg-white p-4 rounded shadow">
+          <h2 className="text-lg font-semibold">📄 Club Following</h2>
+          <p className="text-3xl font-bold text-green-600">{favourites.length- favCount}</p>
+        </div>
+      </div>
+
+      {/* Notifications */}
+      <div className="bg-white p-4 rounded shadow mb-6">
+        <h2 className="text-xl font-semibold mb-2">🔔 Notifications</h2>
+        <ul className="list-disc list-inside text-gray-700 space-y-1">
+          {user1.notifications.map((note, idx) => (
+            <li key={idx}>{note}</li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Upcoming Events */}
+      <div className="bg-white p-4 rounded shadow">
+        <h2 className="text-xl font-semibold mb-2">📅 Upcoming Events</h2>
+        <ul className="divide-y divide-gray-200">
+          {user1.upcomingEvents.map((event, idx) => (
+            <li key={idx} className="py-2 flex justify-between">
+              <span>{event.title}</span>
+              <span className="text-gray-500 text-sm">
+                {event.date} – {event.time}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
       }
       {
         getProfiler(user?.email)?.role === 'event_manager' && (
